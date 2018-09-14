@@ -13,8 +13,8 @@ import org.jboss.seam.annotations.Scope;
 import org.nuxeo.ecm.platform.task.TaskEventNames;
 
 @Scope(CONVERSATION)
-@Name("routingExtraActions")
-@Install(precedence = Install.FRAMEWORK)
+@Name("routingActions")
+@Install(precedence = Install.DEPLOYMENT)
 public class DocumentRoutingExtraActionsBean extends DocumentRoutingActionsBean implements Serializable {
 
 	/**
@@ -25,10 +25,11 @@ public class DocumentRoutingExtraActionsBean extends DocumentRoutingActionsBean 
     private static final Log log = LogFactory.getLog(DocumentRoutingExtraActionsBean.class);
 
     @Observer(value = { TaskEventNames.WORKFLOW_TASK_COMPLETED }, create = false)
-    public void resetCache() {
+    @Override public void resetCache() {
     	log.info("<resetCache> " + relatedRoutes);
         relatedRoutes = null;
         if (!hasRelatedRoute()) {
+        	log.info("<resetCache> resetting tabs list");
             webActions.resetTabList();
         }
     }
